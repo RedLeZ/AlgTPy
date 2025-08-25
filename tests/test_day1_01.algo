@@ -1,0 +1,16 @@
+lire(x)
+c <- 12 <= 10
+x <- x + 1.98
+si x > 12 alors
+  ecrire("nice")
+  si c == faux alors
+    ecrire("omg")
+  finsi
+sinon si x < 12 alors
+  ecrire("mid")
+sinon
+  ecrire("not nice")
+finsi
+ecrire(c)
+ecrire(x)
+

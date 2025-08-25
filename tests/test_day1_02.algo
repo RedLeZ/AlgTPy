@@ -1,0 +1,10 @@
+i <- 0
+tantque i < 5 faire
+    ecrire(i)
+    i <- i + 1
+finTantque
+
+pour j de 1 à 10 pas=2 faire
+    ecrire(j)
+finPour
+

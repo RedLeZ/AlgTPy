@@ -1,0 +1,3 @@
+./__pycache__/*
+./generated/__pycache__/*
+./libs/*
