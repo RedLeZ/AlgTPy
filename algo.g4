@@ -13,6 +13,7 @@ statement
     | ifStmt       # IfStatement
     | whileStmt    # WhileStatement
     | forStmt      # ForStatement
+    | jusquaStmt   # JusquaStatement
     ;
 
 
@@ -40,16 +41,20 @@ elseBlock
     : 'sinon' NEWLINE block
     ;
 
-// ------------------ while / for support ------------------
+// ------------------ while / for / Jusqu'a support ------------------
 
 whileStmt
     : 'tantque' expr 'faire' NEWLINE block 'finTantque'
     ;
 
 forStmt
-    : 'pour' IDENTIFIER 'de' expr 'à' expr ('pas=' expr)? 'faire' NEWLINE block 'finPour'
+    : 'pour' IDENTIFIER 'de' expr ('à' | 'a')  expr ('pas=' expr)? 'faire' NEWLINE block 'finPour'
     ;
-// TODO: jusquaStmt
+
+jusquaStmt
+    : 'repeter' NEWLINE block NEWLINE 'jusqua' expr
+    ;
+
 
 // ------------------ Expressions ------------------
 

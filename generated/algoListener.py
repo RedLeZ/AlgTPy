@@ -80,6 +80,15 @@ class algoListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by algoParser#JusquaStatement.
+    def enterJusquaStatement(self, ctx:algoParser.JusquaStatementContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#JusquaStatement.
+    def exitJusquaStatement(self, ctx:algoParser.JusquaStatementContext):
+        pass
+
+
     # Enter a parse tree produced by algoParser#block.
     def enterBlock(self, ctx:algoParser.BlockContext):
         pass
@@ -149,6 +158,15 @@ class algoListener(ParseTreeListener):
 
     # Exit a parse tree produced by algoParser#forStmt.
     def exitForStmt(self, ctx:algoParser.ForStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#jusquaStmt.
+    def enterJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#jusquaStmt.
+    def exitJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
         pass
 
 

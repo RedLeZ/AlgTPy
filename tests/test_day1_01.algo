@@ -5,12 +5,12 @@ si x > 12 alors
   ecrire("nice")
   si c == faux alors
     ecrire("omg")
-  finsi
+  finSi
 sinon si x < 12 alors
   ecrire("mid")
 sinon
   ecrire("not nice")
-finsi
+finSi
 ecrire(c)
 ecrire(x)
 

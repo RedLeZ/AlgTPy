@@ -49,6 +49,11 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by algoParser#JusquaStatement.
+    def visitJusquaStatement(self, ctx:algoParser.JusquaStatementContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by algoParser#block.
     def visitBlock(self, ctx:algoParser.BlockContext):
         return self.visitChildren(ctx)
@@ -86,6 +91,11 @@ class algoVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by algoParser#forStmt.
     def visitForStmt(self, ctx:algoParser.ForStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#jusquaStmt.
+    def visitJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
         return self.visitChildren(ctx)
 
 

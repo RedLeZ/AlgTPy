@@ -1,0 +1,7 @@
+c <- 0
+repeter
+  pour i de 1 a 12 faire
+    ecrire(i)
+  finPour
+  c <- c + 1
+jusqua c == 2

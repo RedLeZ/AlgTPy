@@ -177,8 +177,26 @@ class Translator(algoVisitor):
         lines = [f"for {var_name} in range({start}, {end}+1, {step}):"]
         lines.append(self._render_block_ctx(ctx.block()))
         return "\n".join(lines)
+    
+    # -------------------- Jusqu'a --------------------
+    def visitJusquaStmt(self, ctx: algoParser.JusquaStmtContext):
+        # condition is after 'jusqua'
+        cond_code = self.visit(ctx.expr())
 
+        # emit while-not condition
+        lines = []
+        lines.append(f"while not ({cond_code}):")
 
+        # block of code to repeat
+        block_code = []
+        for stmt in ctx.block().statement():
+            stmt_code = self.visit(stmt)
+            if stmt_code:
+                for subline in stmt_code.split("\n"):
+                    block_code.append("    " + subline)
+
+        lines.extend(block_code)
+        return "\n".join(lines)
 
    # ------------------ Expressions ------------------
     def visitMulDiv(self, ctx: algoParser.MulDivContext):
