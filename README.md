@@ -44,7 +44,6 @@ Currently supported:
 ---
 
 ## 🛠 Planned Features
-- ⏳ Arrays & matrices  
 - ⏳ File handling  
 - ⏳ Better error messages when translation fails  
 - ⏳ A small CLI tool for easier usage  
