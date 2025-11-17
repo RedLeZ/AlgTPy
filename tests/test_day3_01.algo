@@ -1,0 +1,48 @@
+algorithme TestAlgo
+
+// ----------------- TDO -----------------
+TDO
+	x : entier
+	y : reel
+	tab : tableau de 5 entier
+fin_tdo
+
+// ----------------- TDNT -----------------
+TDNT
+	eleve = enregistrement
+		nom : chaine
+		age : entier
+	fin
+fin_tdnt
+
+// ----------------- Début -----------------
+Debut
+
+// Simple variable assignment
+x <- 10
+y <- 3.14
+ecrire(x+y)
+
+// Array filling
+
+// Procedure example
+Procédure afficherTab(@ t : tableau entier, n : entier)
+Debut
+	Pour i de 0 à n-1 faire
+		ecrire(t)
+	fin_pour
+Fin
+
+// Call procedure
+afficherTab(@ tab, 5)
+
+// Function example
+Fonction cube(n : entier) : entier
+Debut
+	s <- n*n*n
+	retourner s
+Fin
+
+ecrire(cube(3))
+
+Fin

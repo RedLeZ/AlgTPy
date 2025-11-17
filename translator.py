@@ -1,265 +1,314 @@
-from generated.algoVisitor import algoVisitor
 from generated.algoParser import algoParser
-
-type_map = {
-    "entier": "int",
-    "reel": "float", "réel": "float",
-    "booleen": "bool", "booléen": "bool", "bool": "bool",
-    "caractere": "str", "caractère": "str",
-    "chaine": "str"
-}
-
-def _indent_block(code: str, levels: int = 1) -> str:
-    if code is None or code == "":
-        return ""
-    prefix = "    " * levels
-    return "\n".join(prefix + line if line.strip() != "" else "" for line in code.split("\n"))
+from generated.algoVisitor import algoVisitor
 
 class Translator(algoVisitor):
-    def __init__(self, strict_level=2):
+    def __init__(self):
+        super().__init__()
+        self.type_defs = {}  # Map TDNT type names to constructor strings
+        self.import_numpy = False
+        self.var_inits = []  # TDO variable initializations
+        # Accumulated output lines for main.py to consume
         self.output = []
-        self.var_types = {}
-        self.indent_level = 0
-        self.strict_level = strict_level
 
-    # ------- program driver: collect strings from statement visitors and emit with current indent -------
-    def visitProgram(self, ctx):
-        # program : (statement NEWLINE?)* EOF
-        for stmt_ctx in ctx.statement():
-            code = self.visit(stmt_ctx)
-            if code:
-                for line in code.split("\n"):
-                    self._emit(line)
-        return None
-
-    def _emit(self, line: str):
-        indent = "    " * self.indent_level
-        self.output.append(f"{indent}{line}")
-
-    # ------------------ Statements (return strings) ------------------
-    def visitVarDeclStatement(self, ctx: algoParser.VarDeclStatementContext):
-        # ctx.varDecl() -> VarDeclContext
-        vd = ctx.varDecl()
-        name = vd.IDENTIFIER().getText()
-        expr_code = self.visit(vd.expr())
-        return f"{name} = {expr_code}"
-
-    # Accept alternative name if generated differently
-    visitVarDecl = visitVarDeclStatement
-
-    def visitInputStatement(self, ctx: algoParser.InputStatementContext):
-        # ctx.inputStmt() -> InputStmtContext
-        stmt = ctx.inputStmt()
-        name = stmt.IDENTIFIER().getText()
-        type_ctx = stmt.typeName()
-
-        if type_ctx:
-            typ = type_ctx.getText().lower()
-            py_type = type_map.get(typ, "str")
-
-            if py_type == "int":
-                if self.strict_level >= 2:
-                    return (
-                        f"try:\n"
-                        f"    {name} = int(input())\n"
-                        f"except ValueError:\n"
-                        f"    raise ValueError('Input is not an integer')"
-                    )
-                else:
-                    return f"{name} = int(input())"
-
-            elif py_type == "float":
-                if self.strict_level >= 2:
-                    return (
-                        f"try:\n"
-                        f"    {name} = float(input())\n"
-                        f"except ValueError:\n"
-                        f"    raise ValueError('Input is not a float')"
-                    )
-                else:
-                    return f"{name} = float(input())"
-
-            elif py_type == "bool":
-                return (
-                    f"val = input().strip().lower()\n"
-                    f"if val in ['vrai','true']:\n"
-                    f"    {name} = True\n"
-                    f"elif val in ['faux','false']:\n"
-                    f"    {name} = False\n"
-                    f"else:\n"
-                    f"    raise ValueError(f'{{val}} is not a boolean')"
-                )
-            else:
-                return f"{name} = input()"
+    def visitProgram(self, ctx:algoParser.ProgramContext):
+        py = ["# Translated from algo"]
+        main_block = None
+        # Preserve declaration order before the main block
+        for child in ctx.getChildren():
+            if isinstance(child, algoParser.TdntDeclContext):
+                py.append(self.visit(child))
+            elif isinstance(child, algoParser.TdoDeclContext):
+                py.append(self.visit(child))
+            elif isinstance(child, algoParser.BlockContext):
+                main_block = child
+        # Main algorithm block
+        if main_block is None:
+            # Fallback to method if not discovered during child scan
+            py.append(self.visit(ctx.block()))
         else:
-            return f"{name} = autodetect(input())"
+            py.append(self.visit(main_block))
+        # Add numpy import if needed
+        if self.import_numpy:
+            py.insert(1, "import numpy as np")
+        # Expose as list of lines for the driver
+        self.output = "\n".join(py).splitlines()
+        return "\n".join(py)
 
-    visitInputStmt = visitInputStatement
+    # TDNT: Type definitions
+    def visitTdntDecl(self, ctx:algoParser.TdntDeclContext):
+        code = []
+        for newtype in ctx.newTypeDecl():
+            code.append(self.visit(newtype))
+        return "\n".join(code)
 
-    def visitOutputStatement(self, ctx: algoParser.OutputStatementContext):
-        stmt = ctx.outputStmt()
-        expr_code = self.visit(stmt.expr())
-        return f"print({expr_code})"
+    def visitNewTypeDecl(self, ctx:algoParser.NewTypeDeclContext):
+        name = ctx.IDENTIFIER(0).getText()
+        # enregistrement
+        if ctx.getChild(2).getText() == "enregistrement":
+            fields = [(idn.getText(), tname.getText()) for idn, tname in zip(ctx.IDENTIFIER()[1:], [tn for tn in ctx.typeName()])]
+            code = []
+            code.append(f"def {name}():")
+            code.append("    return {")
+            for fname, tname in fields:
+                code.append(f'        "{fname}": {self.python_default(tname)},')
+            code.append("    }")
+            self.type_defs[name] = f"{name}()"
+            return "\n".join(code)
+        # tableau
+        elif ctx.getChild(2).getText() == "tableau":
+            # TDNT array type: produce a numpy array constructor
+            self.import_numpy = True
+            size = ctx.NUMBER().getText()
+            tname = ctx.typeName(0).getText()
+            dtype = self.numpy_dtype(tname)
+            array_def = f"np.zeros({size}, dtype={dtype})"
+            self.type_defs[name] = array_def
+            return f"{name} = {array_def}"
+        else:
+            return f"# Unknown type {name}"
 
-    visitOutputStmt = visitOutputStatement
+    # TDO: Variable initializations
+    def visitTdoDecl(self, ctx:algoParser.TdoDeclContext):
+        code = []
+        for vardecl in ctx.varDecl():
+            code.append(self.visit(vardecl))
+        return "\n".join(code)
 
-    # ------------------ If / ElseIf / Else (compound: return multi-line string with inner lines indented 1 level) ------------------
-    def _render_block_ctx(self, block_ctx):
-        """Given a BlockContext, return the multi-line string for that block (each inner statement already indented by 1 level)."""
-        lines = []
-        # block rule: (statement NEWLINE?)*
-        for stmt in block_ctx.statement():
-            stmt_code = self.visit(stmt)  # must return a string
-            if stmt_code:
-                # indent the returned statement-string by 1 level (relative indentation inside the if)
-                for subline in stmt_code.split("\n"):
-                    lines.append("    " + subline)
-        return "\n".join(lines)
+    def visitVarDecl(self, ctx:algoParser.VarDeclContext):
+        varname = ctx.IDENTIFIER().getText()
+        # Detect array declaration form (tableau de N type)
+        try:
+            children_text = [c.getText() for c in ctx.getChildren()]
+        except Exception:
+            children_text = []
+        if 'tableau' in children_text and 'de' in children_text:
+            try:
+                size = ctx.NUMBER().getText()
+            except Exception:
+                size = '0'
+            tname = ctx.typeName().getText() if ctx.typeName() else 'entier'
+            self.import_numpy = True
+            dtype = self.numpy_dtype(tname)
+            return f"{varname} = np.zeros({size}, dtype={dtype})"
+        else:
+            typename = ctx.typeName().getText()
+            constructor = self.type_defs.get(typename, self.python_default(typename))
+            return f"{varname} = {constructor}"
 
-    def _render_ifstmt_core(self, ifctx):
-        """ifctx is an IfStmtContext (not the wrapper). Return a multi-line string representing the whole if/elif/else
-           with inner statements already indented one level (4 spaces)."""
-        lines = []
-        cond_code = self.visit(ifctx.expr())
-        lines.append(f"if {cond_code}:")
+    # Blocks
+    def visitBlock(self, ctx:algoParser.BlockContext):
+        return "\n".join([self.visit(stmt) for stmt in ctx.statement()])
 
-        # main then block: ifctx.block() returns a BlockContext
-        then_block = ifctx.block()
-        lines.append(self._render_block_ctx(then_block))
+    # Statement wrappers (dispatch from statement-alternative contexts)
+    def visitInputStatement(self, ctx:algoParser.InputStatementContext):
+        return self.visit(ctx.inputStmt())
 
-        # elseifBlock(): zero or more ElseifBlockContext; each has expr and block()
-        for elseif in (ifctx.elseifBlock() or []):
-            elif_cond = self.visit(elseif.expr())
-            lines.append(f"elif {elif_cond}:")
-            lines.append(self._render_block_ctx(elseif.block()))
+    def visitOutputStatement(self, ctx:algoParser.OutputStatementContext):
+        return self.visit(ctx.outputStmt())
 
-        else_ctx = ifctx.elseBlock()
-        if else_ctx:
-            lines.append("else:")
-            if hasattr(else_ctx, "block"):
-                else_block = else_ctx.block()
-            else:
-                else_block = else_ctx
-            lines.append(self._render_block_ctx(else_block))
+    def visitIfStatement(self, ctx:algoParser.IfStatementContext):
+        return self.visit(ctx.ifStmt())
 
-      
-  
-        out_lines = []
-        for piece in lines:
-            if piece is None:
-                continue
-            for l in str(piece).split("\n"):
-                if l != "":
-                    out_lines.append(l)
-        return "\n".join(out_lines)
+    def visitWhileStatement(self, ctx:algoParser.WhileStatementContext):
+        return self.visit(ctx.whileStmt())
 
-    def visitIfStatement(self, ctx: algoParser.IfStatementContext):
-        ifctx = ctx.ifStmt()
-        return self._render_ifstmt_core(ifctx)
+    def visitForStatement(self, ctx:algoParser.ForStatementContext):
+        return self.visit(ctx.forStmt())
 
-    def visitIfStmt(self, ctx: algoParser.IfStmtContext):
-        return self._render_ifstmt_core(ctx)
+    def visitJusquaStatement(self, ctx:algoParser.JusquaStatementContext):
+        return self.visit(ctx.jusquaStmt())
 
-    # ------------------ While loop ------------------
-    def visitWhileStmt(self, ctx: algoParser.WhileStmtContext):
-        cond_code = self.visit(ctx.expr())
-        lines = [f"while {cond_code}:"]
-        lines.append(self._render_block_ctx(ctx.block()))
-        return "\n".join(lines)
+    def visitSelonStatement(self, ctx:algoParser.SelonStatementContext):
+        return self.visit(ctx.selonStmt())
 
-    # ------------------ For loop ------------------    
-    def visitForStmt(self, ctx: algoParser.ForStmtContext):
-        var_name = ctx.IDENTIFIER().getText()
+    def visitProcedureDeclaration(self, ctx:algoParser.ProcedureDeclarationContext):
+        return self.visit(ctx.procedureDecl())
+
+    def visitFunctionDeclaration(self, ctx:algoParser.FunctionDeclarationContext):
+        return self.visit(ctx.functionDecl())
+
+    def visitFunctionCallStatement(self, ctx:algoParser.FunctionCallStatementContext):
+        return self.visit(ctx.funcCall())
+
+    def visitAssignStatement(self, ctx:algoParser.AssignStatementContext):
+        return self.visit(ctx.assignStmt())
+
+    # Concrete statement implementations (rule-level contexts)
+    def visitInputStmt(self, ctx:algoParser.InputStmtContext):
+        var = ctx.IDENTIFIER().getText()
+        return f"{var} = input()"
+
+    def visitOutputStmt(self, ctx:algoParser.OutputStmtContext):
+        exprs = [self.visit(e) for e in ctx.expr()]
+        return f"print({', '.join(exprs)})"
+
+    def visitIfStmt(self, ctx:algoParser.IfStmtContext):
+        py = []
+        py.append(f"if {self.visit(ctx.expr(0))}:")
+        py.append(self.indent(self.visit(ctx.block(0))))
+        # elif branches
+        for i in range(1, len(ctx.expr())):
+            py.append(f"elif {self.visit(ctx.expr(i))}:")
+            py.append(self.indent(self.visit(ctx.block(i))))
+        # else branch
+        if ctx.block(-1) and ctx.getChildCount() > 6:  # has 'sinon'
+            py.append("else:")
+            py.append(self.indent(self.visit(ctx.block(-1))))
+        return "\n".join(py)
+
+    def visitWhileStmt(self, ctx:algoParser.WhileStmtContext):
+        cond = self.visit(ctx.expr())
+        py = [f"while {cond}:"]
+        py.append(self.indent(self.visit(ctx.block())))
+        return "\n".join(py)
+
+    def visitForStmt(self, ctx:algoParser.ForStmtContext):
+        var = ctx.IDENTIFIER().getText()
         start = self.visit(ctx.expr(0))
         end = self.visit(ctx.expr(1))
         step = self.visit(ctx.expr(2)) if ctx.expr(2) else "1"
+        py = [f"for {var} in range({start}, {end}+1, {step}):"]
+        py.append(self.indent(self.visit(ctx.block())))
+        return "\n".join(py)
 
-        lines = [f"for {var_name} in range({start}, {end}+1, {step}):"]
-        lines.append(self._render_block_ctx(ctx.block()))
-        return "\n".join(lines)
-    
-    # -------------------- Jusqu'a --------------------
-    def visitJusquaStmt(self, ctx: algoParser.JusquaStmtContext):
-        # condition is after 'jusqua'
-        cond_code = self.visit(ctx.expr())
+    def visitJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
+        py = []
+        py.append("while True:")
+        py.append(self.indent(self.visit(ctx.block())))
+        py.append(f"    if {self.visit(ctx.expr())}: break")
+        return "\n".join(py)
 
-        # emit while-not condition
-        lines = []
-        lines.append(f"while not ({cond_code}):")
-
-        # block of code to repeat
-        block_code = []
-        for stmt in ctx.block().statement():
-            stmt_code = self.visit(stmt)
-            if stmt_code:
-                for subline in stmt_code.split("\n"):
-                    block_code.append("    " + subline)
-
-        lines.extend(block_code)
-        return "\n".join(lines)
-
-   # ------------------ Expressions ------------------
-    def visitMulDiv(self, ctx: algoParser.MulDivContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.op.text
-        return f"({left} {op} {right})"
-
-    def visitAddSub(self, ctx: algoParser.AddSubContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.op.text
-        return f"({left} {op} {right})"
-
-    def visitComparison(self, ctx: algoParser.ComparisonContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.op.text
-        return f"({left} {op} {right})"
-
-    def visitLogicalAndOr(self, ctx: algoParser.LogicalAndOrContext):
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.op.text
-        if op == "et":
-            op = "and"
-        elif op == "ou":
-            op = "or"
-        return f"({left} {op} {right})"
-
-    def visitNegate(self, ctx: algoParser.NegateContext):
+    def visitSelonStmt(self, ctx:algoParser.SelonStmtContext):
         expr = self.visit(ctx.expr())
-        return f"-{expr}"
+        py = []
+        first_case = True
+        for i, case_expr in enumerate(ctx.expr()[1:]):
+            block = ctx.block(i)
+            cond = f"{expr} == {self.visit(case_expr)}"
+            if first_case:
+                py.append(f"if {cond}:")
+                first_case = False
+            else:
+                py.append(f"elif {cond}:")
+            py.append(self.indent(self.visit(block)))
+        # autres/default
+        if ctx.block(-1):
+            py.append("else:")
+            py.append(self.indent(self.visit(ctx.block(-1))))
+        return "\n".join(py)
 
-    def visitParens(self, ctx: algoParser.ParensContext):
-        expr = self.visit(ctx.expr())
-        return f"({expr})"
+    # Procedures / Functions
+    def visitProcedureDecl(self, ctx:algoParser.ProcedureDeclContext):
+        name = ctx.IDENTIFIER().getText()
+        params = self.visit(ctx.paramList()) if ctx.paramList() else ""
+        py = [f"def {name}({params}):"]
+        py.append(self.indent(self.visit(ctx.block())))
+        return "\n".join(py)
 
-    def visitNumber(self, ctx: algoParser.NumberContext):
-        return ctx.NUMBER().getText()
+    def visitFunctionDecl(self, ctx:algoParser.FunctionDeclContext):
+        name = ctx.IDENTIFIER().getText()
+        params = self.visit(ctx.paramList()) if ctx.paramList() else ""
+        py = [f"def {name}({params}):"]
+        py.append(self.indent(self.visit(ctx.block())))
+        py.append(self.indent(f"return {self.visit(ctx.expr())}"))
+        return "\n".join(py)
 
-    def visitBoolean(self, ctx: algoParser.BooleanContext):
-        b = ctx.BOOLEAN().getText()
-        return "True" if b.lower() == "vrai" else "False"
+    def visitParamList(self, ctx:algoParser.ParamListContext):
+        return ", ".join([self.visit(p) for p in ctx.param()])
 
-    def visitString(self, ctx: algoParser.StringContext):
-        return ctx.STRING().getText()
-
-    def visitChar(self, ctx: algoParser.CharContext):
-        return ctx.CHAR().getText()
-
-    def visitVariable(self, ctx: algoParser.VariableContext):
+    def visitParam(self, ctx:algoParser.ParamContext):
         return ctx.IDENTIFIER().getText()
 
-    # Fallback generic visitor for unlabeled statement contexts 
-    def visitStatement(self, ctx):
-        if ctx.varDecl():
-            return self.visitVarDeclStatement(ctx)
-        if ctx.inputStmt():
-            return self.visitInputStatement(ctx)
-        if ctx.outputStmt():
-            return self.visitOutputStatement(ctx)
-        if ctx.ifStmt():
-            return self.visitIfStmt(ctx.ifStmt())
-        return None
+    # Function / Procedure Calls
+    def visitFuncCall(self, ctx:algoParser.FuncCallContext):
+        name = ctx.IDENTIFIER().getText()
+        args = [self.visit(e) for e in ctx.expr()]
+        return f"{name}({', '.join(args)})"
 
+    # Assignment
+    def visitAssignStmt(self, ctx:algoParser.AssignStmtContext):
+        var = ctx.IDENTIFIER().getText()
+        value = self.visit(ctx.expr())
+        return f"{var} = {value}"
+
+    # Expressions
+    def visitMulDiv(self, ctx:algoParser.MulDivContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.op.text
+        return f"({left} {op} {right})"
+
+    def visitAddSub(self, ctx:algoParser.AddSubContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.op.text
+        return f"({left} {op} {right})"
+
+    def visitComparison(self, ctx:algoParser.ComparisonContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.op.text
+        op_map = {'=': '==', '≠': '!=', '<': '<', '≤': '<=', '>': '>', '≥': '>='}
+        py_op = op_map.get(op, op)
+        return f"({left} {py_op} {right})"
+
+    def visitLogical(self, ctx:algoParser.LogicalContext):
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.op.text
+        op_map = {'et': 'and', 'ou': 'or', 'ouex': '^'}
+        py_op = op_map.get(op, op)
+        return f"({left} {py_op} {right})"
+
+    def visitNegate(self, ctx:algoParser.NegateContext):
+        return f"(not {self.visit(ctx.expr())})"
+
+    def visitParens(self, ctx:algoParser.ParensContext):
+        return f"({self.visit(ctx.expr())})"
+
+    def visitNumber(self, ctx:algoParser.NumberContext):
+        return ctx.NUMBER().getText()
+
+    def visitBoolean(self, ctx:algoParser.BooleanContext):
+        val = ctx.BOOLEAN().getText()
+        return "True" if val == "vrai" else "False"
+
+    def visitString(self, ctx:algoParser.StringContext):
+        return ctx.STRING().getText()
+
+    def visitChar(self, ctx:algoParser.CharContext):
+        return ctx.CHAR().getText()
+
+    def visitVariable(self, ctx:algoParser.VariableContext):
+        return ctx.IDENTIFIER().getText()
+
+    # Utility
+    def python_default(self, tname):
+        tname = tname.lower()
+        if tname in ["entier"]:
+            return "0"
+        elif tname in ["réel", "reel"]:
+            return "0.0"
+        elif tname in ["booléen", "booleen", "bool"]:
+            return "False"
+        elif tname in ["caractère", "caractere"]:
+            return "''"
+        elif tname in ["chaîne", "chaine"]:
+            return "''"
+        elif tname in self.type_defs:
+            return f"{tname}()"
+        return "None"
+
+    def numpy_dtype(self, tname):
+        tname = tname.lower()
+        if tname in ["entier"]:
+            return "int"
+        elif tname in ["réel", "reel"]:
+            return "float"
+        elif tname in ["booléen", "booleen", "bool"]:
+            return "bool"
+        else:
+            return "object"
+
+    def indent(self, text):
+        return "\n".join(["    " + line for line in text.splitlines() if line.strip() != ""])

@@ -38,11 +38,12 @@ Currently supported:
 - ✅ While loops (`tantque ... faire ... finTantque`)  
 - ✅ For loops (`pour ... à ... pas ... finPour`)  
 - ✅ Expressions: arithmetic, boolean, comparisons  
+- ✅  Functions / Procedures
+- ✅ Arrays & matrices 
 
 ---
 
 ## 🛠 Planned Features
-- ⏳ Functions / Procedures  
 - ⏳ Arrays & matrices  
 - ⏳ File handling  
 - ⏳ Better error messages when translation fails  

@@ -8,15 +8,6 @@ else:
 # This class defines a complete listener for a parse tree produced by algoParser.
 class algoListener(ParseTreeListener):
 
-    # Enter a parse tree produced by algoParser#varDecl.
-    def enterVarDecl(self, ctx:algoParser.VarDeclContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#varDecl.
-    def exitVarDecl(self, ctx:algoParser.VarDeclContext):
-        pass
-
-
     # Enter a parse tree produced by algoParser#program.
     def enterProgram(self, ctx:algoParser.ProgramContext):
         pass
@@ -26,12 +17,48 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#VarDeclStatement.
-    def enterVarDeclStatement(self, ctx:algoParser.VarDeclStatementContext):
+    # Enter a parse tree produced by algoParser#tdntDecl.
+    def enterTdntDecl(self, ctx:algoParser.TdntDeclContext):
         pass
 
-    # Exit a parse tree produced by algoParser#VarDeclStatement.
-    def exitVarDeclStatement(self, ctx:algoParser.VarDeclStatementContext):
+    # Exit a parse tree produced by algoParser#tdntDecl.
+    def exitTdntDecl(self, ctx:algoParser.TdntDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#newTypeDecl.
+    def enterNewTypeDecl(self, ctx:algoParser.NewTypeDeclContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#newTypeDecl.
+    def exitNewTypeDecl(self, ctx:algoParser.NewTypeDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#tdoDecl.
+    def enterTdoDecl(self, ctx:algoParser.TdoDeclContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#tdoDecl.
+    def exitTdoDecl(self, ctx:algoParser.TdoDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#varDecl.
+    def enterVarDecl(self, ctx:algoParser.VarDeclContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#varDecl.
+    def exitVarDecl(self, ctx:algoParser.VarDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#block.
+    def enterBlock(self, ctx:algoParser.BlockContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#block.
+    def exitBlock(self, ctx:algoParser.BlockContext):
         pass
 
 
@@ -89,12 +116,48 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#block.
-    def enterBlock(self, ctx:algoParser.BlockContext):
+    # Enter a parse tree produced by algoParser#SelonStatement.
+    def enterSelonStatement(self, ctx:algoParser.SelonStatementContext):
         pass
 
-    # Exit a parse tree produced by algoParser#block.
-    def exitBlock(self, ctx:algoParser.BlockContext):
+    # Exit a parse tree produced by algoParser#SelonStatement.
+    def exitSelonStatement(self, ctx:algoParser.SelonStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#ProcedureDeclaration.
+    def enterProcedureDeclaration(self, ctx:algoParser.ProcedureDeclarationContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#ProcedureDeclaration.
+    def exitProcedureDeclaration(self, ctx:algoParser.ProcedureDeclarationContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#FunctionDeclaration.
+    def enterFunctionDeclaration(self, ctx:algoParser.FunctionDeclarationContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#FunctionDeclaration.
+    def exitFunctionDeclaration(self, ctx:algoParser.FunctionDeclarationContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#FunctionCallStatement.
+    def enterFunctionCallStatement(self, ctx:algoParser.FunctionCallStatementContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#FunctionCallStatement.
+    def exitFunctionCallStatement(self, ctx:algoParser.FunctionCallStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#AssignStatement.
+    def enterAssignStatement(self, ctx:algoParser.AssignStatementContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#AssignStatement.
+    def exitAssignStatement(self, ctx:algoParser.AssignStatementContext):
         pass
 
 
@@ -125,24 +188,6 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#elseifBlock.
-    def enterElseifBlock(self, ctx:algoParser.ElseifBlockContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#elseifBlock.
-    def exitElseifBlock(self, ctx:algoParser.ElseifBlockContext):
-        pass
-
-
-    # Enter a parse tree produced by algoParser#elseBlock.
-    def enterElseBlock(self, ctx:algoParser.ElseBlockContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#elseBlock.
-    def exitElseBlock(self, ctx:algoParser.ElseBlockContext):
-        pass
-
-
     # Enter a parse tree produced by algoParser#whileStmt.
     def enterWhileStmt(self, ctx:algoParser.WhileStmtContext):
         pass
@@ -167,6 +212,60 @@ class algoListener(ParseTreeListener):
 
     # Exit a parse tree produced by algoParser#jusquaStmt.
     def exitJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#selonStmt.
+    def enterSelonStmt(self, ctx:algoParser.SelonStmtContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#selonStmt.
+    def exitSelonStmt(self, ctx:algoParser.SelonStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#procedureDecl.
+    def enterProcedureDecl(self, ctx:algoParser.ProcedureDeclContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#procedureDecl.
+    def exitProcedureDecl(self, ctx:algoParser.ProcedureDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#functionDecl.
+    def enterFunctionDecl(self, ctx:algoParser.FunctionDeclContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#functionDecl.
+    def exitFunctionDecl(self, ctx:algoParser.FunctionDeclContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#paramList.
+    def enterParamList(self, ctx:algoParser.ParamListContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#paramList.
+    def exitParamList(self, ctx:algoParser.ParamListContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#param.
+    def enterParam(self, ctx:algoParser.ParamContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#param.
+    def exitParam(self, ctx:algoParser.ParamContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#funcCall.
+    def enterFuncCall(self, ctx:algoParser.FuncCallContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#funcCall.
+    def exitFuncCall(self, ctx:algoParser.FuncCallContext):
         pass
 
 
@@ -233,12 +332,12 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#LogicalAndOr.
-    def enterLogicalAndOr(self, ctx:algoParser.LogicalAndOrContext):
+    # Enter a parse tree produced by algoParser#Logical.
+    def enterLogical(self, ctx:algoParser.LogicalContext):
         pass
 
-    # Exit a parse tree produced by algoParser#LogicalAndOr.
-    def exitLogicalAndOr(self, ctx:algoParser.LogicalAndOrContext):
+    # Exit a parse tree produced by algoParser#Logical.
+    def exitLogical(self, ctx:algoParser.LogicalContext):
         pass
 
 
@@ -266,6 +365,24 @@ class algoListener(ParseTreeListener):
 
     # Exit a parse tree produced by algoParser#Boolean.
     def exitBoolean(self, ctx:algoParser.BooleanContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#FuncCallExpr.
+    def enterFuncCallExpr(self, ctx:algoParser.FuncCallExprContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#FuncCallExpr.
+    def exitFuncCallExpr(self, ctx:algoParser.FuncCallExprContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#assignStmt.
+    def enterAssignStmt(self, ctx:algoParser.AssignStmtContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#assignStmt.
+    def exitAssignStmt(self, ctx:algoParser.AssignStmtContext):
         pass
 
 

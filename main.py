@@ -18,7 +18,6 @@ def main():
         help="Strictness level: 1=lenient, 2=moderate, 3=very strict"
     )
     args = parser.parse_args()
-
     # Read and tokenize
     input_stream = FileStream(args.input_file, encoding='utf-8')
     lexer = algoLexer(input_stream)
@@ -26,7 +25,7 @@ def main():
     parser_ = algoParser(tokens)
     tree = parser_.program()
 
-    visitor = Translator(strict_level=args.strictness)
+    visitor = Translator()
     visitor.visit(tree)
     
     # injecting autodetect()

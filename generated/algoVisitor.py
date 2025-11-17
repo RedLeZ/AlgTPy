@@ -9,18 +9,33 @@ else:
 
 class algoVisitor(ParseTreeVisitor):
 
-    # Visit a parse tree produced by algoParser#varDecl.
-    def visitVarDecl(self, ctx:algoParser.VarDeclContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by algoParser#program.
     def visitProgram(self, ctx:algoParser.ProgramContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#VarDeclStatement.
-    def visitVarDeclStatement(self, ctx:algoParser.VarDeclStatementContext):
+    # Visit a parse tree produced by algoParser#tdntDecl.
+    def visitTdntDecl(self, ctx:algoParser.TdntDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#newTypeDecl.
+    def visitNewTypeDecl(self, ctx:algoParser.NewTypeDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#tdoDecl.
+    def visitTdoDecl(self, ctx:algoParser.TdoDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#varDecl.
+    def visitVarDecl(self, ctx:algoParser.VarDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#block.
+    def visitBlock(self, ctx:algoParser.BlockContext):
         return self.visitChildren(ctx)
 
 
@@ -54,8 +69,28 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#block.
-    def visitBlock(self, ctx:algoParser.BlockContext):
+    # Visit a parse tree produced by algoParser#SelonStatement.
+    def visitSelonStatement(self, ctx:algoParser.SelonStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#ProcedureDeclaration.
+    def visitProcedureDeclaration(self, ctx:algoParser.ProcedureDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#FunctionDeclaration.
+    def visitFunctionDeclaration(self, ctx:algoParser.FunctionDeclarationContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#FunctionCallStatement.
+    def visitFunctionCallStatement(self, ctx:algoParser.FunctionCallStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#AssignStatement.
+    def visitAssignStatement(self, ctx:algoParser.AssignStatementContext):
         return self.visitChildren(ctx)
 
 
@@ -74,16 +109,6 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#elseifBlock.
-    def visitElseifBlock(self, ctx:algoParser.ElseifBlockContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by algoParser#elseBlock.
-    def visitElseBlock(self, ctx:algoParser.ElseBlockContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by algoParser#whileStmt.
     def visitWhileStmt(self, ctx:algoParser.WhileStmtContext):
         return self.visitChildren(ctx)
@@ -96,6 +121,36 @@ class algoVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by algoParser#jusquaStmt.
     def visitJusquaStmt(self, ctx:algoParser.JusquaStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#selonStmt.
+    def visitSelonStmt(self, ctx:algoParser.SelonStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#procedureDecl.
+    def visitProcedureDecl(self, ctx:algoParser.ProcedureDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#functionDecl.
+    def visitFunctionDecl(self, ctx:algoParser.FunctionDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#paramList.
+    def visitParamList(self, ctx:algoParser.ParamListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#param.
+    def visitParam(self, ctx:algoParser.ParamContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#funcCall.
+    def visitFuncCall(self, ctx:algoParser.FuncCallContext):
         return self.visitChildren(ctx)
 
 
@@ -134,8 +189,8 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#LogicalAndOr.
-    def visitLogicalAndOr(self, ctx:algoParser.LogicalAndOrContext):
+    # Visit a parse tree produced by algoParser#Logical.
+    def visitLogical(self, ctx:algoParser.LogicalContext):
         return self.visitChildren(ctx)
 
 
@@ -151,6 +206,16 @@ class algoVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by algoParser#Boolean.
     def visitBoolean(self, ctx:algoParser.BooleanContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#FuncCallExpr.
+    def visitFuncCallExpr(self, ctx:algoParser.FuncCallExprContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#assignStmt.
+    def visitAssignStmt(self, ctx:algoParser.AssignStmtContext):
         return self.visitChildren(ctx)
 
 
