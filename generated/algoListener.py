@@ -80,6 +80,24 @@ class algoListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by algoParser#OpenFileStatement.
+    def enterOpenFileStatement(self, ctx:algoParser.OpenFileStatementContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#OpenFileStatement.
+    def exitOpenFileStatement(self, ctx:algoParser.OpenFileStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#CloseFileStatement.
+    def enterCloseFileStatement(self, ctx:algoParser.CloseFileStatementContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#CloseFileStatement.
+    def exitCloseFileStatement(self, ctx:algoParser.CloseFileStatementContext):
+        pass
+
+
     # Enter a parse tree produced by algoParser#IfStatement.
     def enterIfStatement(self, ctx:algoParser.IfStatementContext):
         pass
@@ -158,6 +176,24 @@ class algoListener(ParseTreeListener):
 
     # Exit a parse tree produced by algoParser#AssignStatement.
     def exitAssignStatement(self, ctx:algoParser.AssignStatementContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#openFileStmt.
+    def enterOpenFileStmt(self, ctx:algoParser.OpenFileStmtContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#openFileStmt.
+    def exitOpenFileStmt(self, ctx:algoParser.OpenFileStmtContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#closeFileStmt.
+    def enterCloseFileStmt(self, ctx:algoParser.CloseFileStmtContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#closeFileStmt.
+    def exitCloseFileStmt(self, ctx:algoParser.CloseFileStmtContext):
         pass
 
 

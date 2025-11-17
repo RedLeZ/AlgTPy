@@ -3,3 +3,8 @@ generated/__pycache__/
 *.pyc
 
 libs/
+.vscode/
+.idea/
+.DS_Store
+tests/tmp_*.*
+extensions/*

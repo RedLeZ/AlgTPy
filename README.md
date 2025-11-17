@@ -40,11 +40,11 @@ Currently supported:
 - ✅ Expressions: arithmetic, boolean, comparisons  
 - ✅  Functions / Procedures
 - ✅ Arrays & matrices 
+- ⏳/✅ File handling (experimental but usable)
 
 ---
 
 ## 🛠 Planned Features
-- ⏳ File handling  
 - ⏳ Better error messages when translation fails  
 - ⏳ A small CLI tool for easier usage  
 

@@ -1,0 +1,7 @@
+algorithme io_demo
+Debut
+    chemin <- "tests/tmp_io_02.txt"
+    ouvrir(chemin, f, 'w')
+    ecrire(f, "hello")
+    fermer(f)
+Fin

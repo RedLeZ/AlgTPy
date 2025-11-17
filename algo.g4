@@ -41,6 +41,8 @@ block
 statement
     : inputStmt        # InputStatement
     | outputStmt       # OutputStatement
+    | openFileStmt     # OpenFileStatement
+    | closeFileStmt    # CloseFileStatement
     | ifStmt           # IfStatement
     | whileStmt        # WhileStatement
     | forStmt          # ForStatement
@@ -52,14 +54,23 @@ statement
     | assignStmt       # AssignStatement
     ;
 
+// ------------------- File I/O -------------------
+
+openFileStmt
+    : 'ouvrir' '(' IDENTIFIER ',' IDENTIFIER  ',' ('r'|'w'|'a'|'rb'|'wb'|'ab') ')'
+    ;
+
+closeFileStmt
+    : 'fermer' '(' IDENTIFIER ')'
+    ;
 // ------------------- Input / Output -------------------
 
 inputStmt
-    : 'lire' '(' IDENTIFIER (':' typeName)? ')'
+    : 'lire' '('(IDENTIFIER ',')?  IDENTIFIER (':' typeName)?')'
     ;
 
 outputStmt
-    : ('écrire'|'ecrire') '(' expr (',' expr)* ')'
+    : ('écrire'|'ecrire') '('(IDENTIFIER ',')? expr (',' expr)* ')' 
     ;
 
 // ------------------- Control Structures -------------------

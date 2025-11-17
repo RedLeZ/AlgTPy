@@ -1,0 +1,18 @@
+algorithme io_bin_demo
+Debut
+    chemin <- "tests/tmp_io_bin.dat"
+    ouvrir(chemin, f, wb)
+    ecrire(f, 42)
+    ecrire(f, 12)
+    fermer(f)
+
+    ouvrir(chemin, f2, rb)
+    x <- 0
+    y <- 0
+    lire(f2, x)
+    lire(f2, y)
+    fermer(f2)
+
+    ecrire(x)
+    ecrire(y)
+Fin

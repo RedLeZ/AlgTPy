@@ -49,6 +49,16 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by algoParser#OpenFileStatement.
+    def visitOpenFileStatement(self, ctx:algoParser.OpenFileStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#CloseFileStatement.
+    def visitCloseFileStatement(self, ctx:algoParser.CloseFileStatementContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by algoParser#IfStatement.
     def visitIfStatement(self, ctx:algoParser.IfStatementContext):
         return self.visitChildren(ctx)
@@ -91,6 +101,16 @@ class algoVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by algoParser#AssignStatement.
     def visitAssignStatement(self, ctx:algoParser.AssignStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#openFileStmt.
+    def visitOpenFileStmt(self, ctx:algoParser.OpenFileStmtContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#closeFileStmt.
+    def visitCloseFileStmt(self, ctx:algoParser.CloseFileStmtContext):
         return self.visitChildren(ctx)
 
 

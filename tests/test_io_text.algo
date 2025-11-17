@@ -1,0 +1,16 @@
+algorithme io_text_demo
+Debut
+    chemin <- "tests/tmp_io_text.txt"
+    ouvrir(chemin, f, w)
+    ecrire(f, "line1\n")
+    ecrire(f, "line2")
+    fermer(f)
+
+    ouvrir(chemin, rf, r)
+    s <- ""
+    tant que non finfichier(rf) faire
+        lireln(rf, s)
+        ecrire(s)
+    fin_tant_que
+    fermer(rf)
+Fin
