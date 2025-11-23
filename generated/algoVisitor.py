@@ -179,11 +179,6 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#Number.
-    def visitNumber(self, ctx:algoParser.NumberContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by algoParser#MulDiv.
     def visitMulDiv(self, ctx:algoParser.MulDivContext):
         return self.visitChildren(ctx)
@@ -194,18 +189,8 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#Comparison.
-    def visitComparison(self, ctx:algoParser.ComparisonContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by algoParser#Parens.
     def visitParens(self, ctx:algoParser.ParensContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by algoParser#Char.
-    def visitChar(self, ctx:algoParser.CharContext):
         return self.visitChildren(ctx)
 
 
@@ -214,13 +199,33 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by algoParser#Negate.
-    def visitNegate(self, ctx:algoParser.NegateContext):
+    # Visit a parse tree produced by algoParser#Index.
+    def visitIndex(self, ctx:algoParser.IndexContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by algoParser#String.
     def visitString(self, ctx:algoParser.StringContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#Number.
+    def visitNumber(self, ctx:algoParser.NumberContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#Comparison.
+    def visitComparison(self, ctx:algoParser.ComparisonContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#Char.
+    def visitChar(self, ctx:algoParser.CharContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by algoParser#Negate.
+    def visitNegate(self, ctx:algoParser.NegateContext):
         return self.visitChildren(ctx)
 
 

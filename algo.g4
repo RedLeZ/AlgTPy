@@ -18,7 +18,7 @@ tdntDecl
 
 newTypeDecl
     : IDENTIFIER '=' 'enregistrement' NEWLINE
-          (IDENTIFIER ':' typeName NEWLINE)+
+          (IDENTIFIER ':' typeName ',' NEWLINE)+
       'fin'
     | IDENTIFIER '=' 'tableau' 'de' NUMBER typeName
     ;
@@ -91,7 +91,7 @@ forStmt
     ;
 
 jusquaStmt
-    : 'répéter' NEWLINE block 'jusqu’à' expr
+    : ('répéter' | 'repeter') NEWLINE block ('jusqu’à' | 'jusqua') expr
     ;
 
 selonStmt
@@ -141,6 +141,7 @@ expr
     | expr op=('et'|'ou'|'ouex') expr # Logical
     | 'non' expr                       # Negate
     | '(' expr ')'                     # Parens
+    | IDENTIFIER '[' expr ']'          # Index
     | funcCall                         # FuncCallExpr
     | NUMBER                           # Number
     | BOOLEAN                          # Boolean
@@ -150,7 +151,7 @@ expr
     ;
 
 assignStmt
-    : IDENTIFIER '<-' expr
+    : IDENTIFIER ('[' expr ']')? '<-' expr
     ;
 
 // ------------------- Types -------------------

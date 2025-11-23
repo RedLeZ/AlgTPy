@@ -314,15 +314,6 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#Number.
-    def enterNumber(self, ctx:algoParser.NumberContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#Number.
-    def exitNumber(self, ctx:algoParser.NumberContext):
-        pass
-
-
     # Enter a parse tree produced by algoParser#MulDiv.
     def enterMulDiv(self, ctx:algoParser.MulDivContext):
         pass
@@ -341,30 +332,12 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#Comparison.
-    def enterComparison(self, ctx:algoParser.ComparisonContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#Comparison.
-    def exitComparison(self, ctx:algoParser.ComparisonContext):
-        pass
-
-
     # Enter a parse tree produced by algoParser#Parens.
     def enterParens(self, ctx:algoParser.ParensContext):
         pass
 
     # Exit a parse tree produced by algoParser#Parens.
     def exitParens(self, ctx:algoParser.ParensContext):
-        pass
-
-
-    # Enter a parse tree produced by algoParser#Char.
-    def enterChar(self, ctx:algoParser.CharContext):
-        pass
-
-    # Exit a parse tree produced by algoParser#Char.
-    def exitChar(self, ctx:algoParser.CharContext):
         pass
 
 
@@ -377,12 +350,12 @@ class algoListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by algoParser#Negate.
-    def enterNegate(self, ctx:algoParser.NegateContext):
+    # Enter a parse tree produced by algoParser#Index.
+    def enterIndex(self, ctx:algoParser.IndexContext):
         pass
 
-    # Exit a parse tree produced by algoParser#Negate.
-    def exitNegate(self, ctx:algoParser.NegateContext):
+    # Exit a parse tree produced by algoParser#Index.
+    def exitIndex(self, ctx:algoParser.IndexContext):
         pass
 
 
@@ -392,6 +365,42 @@ class algoListener(ParseTreeListener):
 
     # Exit a parse tree produced by algoParser#String.
     def exitString(self, ctx:algoParser.StringContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#Number.
+    def enterNumber(self, ctx:algoParser.NumberContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#Number.
+    def exitNumber(self, ctx:algoParser.NumberContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#Comparison.
+    def enterComparison(self, ctx:algoParser.ComparisonContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#Comparison.
+    def exitComparison(self, ctx:algoParser.ComparisonContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#Char.
+    def enterChar(self, ctx:algoParser.CharContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#Char.
+    def exitChar(self, ctx:algoParser.CharContext):
+        pass
+
+
+    # Enter a parse tree produced by algoParser#Negate.
+    def enterNegate(self, ctx:algoParser.NegateContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#Negate.
+    def exitNegate(self, ctx:algoParser.NegateContext):
         pass
 
 

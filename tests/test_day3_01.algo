@@ -10,8 +10,8 @@ fin_tdo
 // ----------------- TDNT -----------------
 TDNT
 	eleve = enregistrement
-		nom : chaine
-		age : entier
+		nom : chaine,
+		age : entier,
 	fin
 fin_tdnt
 
@@ -29,12 +29,13 @@ ecrire(x+y)
 Procédure afficherTab(@ t : tableau entier, n : entier)
 Debut
 	Pour i de 0 à n-1 faire
+		t[i] <- i * i + 1
 		ecrire(t)
 	fin_pour
 Fin
 
 // Call procedure
-afficherTab(@ tab, 5)
+afficherTab(@tab, 5)
 
 // Function example
 Fonction cube(n : entier) : entier

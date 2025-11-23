@@ -465,9 +465,16 @@ class Translator(algoVisitor):
 
     # Assignment
     def visitAssignStmt(self, ctx:algoParser.AssignStmtContext):
-        var = ctx.IDENTIFIER().getText()
-        value = self.visit(ctx.expr())
-        return f"{var} = {value}"
+        name = ctx.IDENTIFIER().getText()
+        try:
+            if ctx.getChildCount() >= 5 and ctx.getChild(1).getText() == '[':
+                index_expr = self.visit(ctx.expr(0))
+                value_expr = self.visit(ctx.expr(1))
+                return f"{name}[{index_expr}] = {value_expr}"
+        except Exception:
+            pass
+        value_expr = self.visit(ctx.expr(0))
+        return f"{name} = {value_expr}"
 
     # Expressions
     def visitMulDiv(self, ctx:algoParser.MulDivContext):
@@ -503,6 +510,11 @@ class Translator(algoVisitor):
 
     def visitParens(self, ctx:algoParser.ParensContext):
         return f"({self.visit(ctx.expr())})"
+
+    def visitIndex(self, ctx:algoParser.IndexContext):
+        name = ctx.IDENTIFIER().getText()
+        idx = self.visit(ctx.expr())
+        return f"{name}[{idx}]"
 
     def visitNumber(self, ctx:algoParser.NumberContext):
         return ctx.NUMBER().getText()

@@ -1,3 +1,7 @@
+algorithme test_day1_01
+
+Debut
+x <- 10
 lire(x)
 c <- 12 <= 10
 x <- x + 1.98
@@ -5,12 +9,13 @@ si x > 12 alors
   ecrire("nice")
   si c == faux alors
     ecrire("omg")
-  finSi
+  fin_si
 sinon si x < 12 alors
   ecrire("mid")
 sinon
   ecrire("not nice")
-finSi
+fin_si
 ecrire(c)
 ecrire(x)
+Fin
 

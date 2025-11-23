@@ -1,10 +1,14 @@
+algorithme test_day1_02
+Debut
+
 i <- 0
-tantque i < 5 faire
+tant que i < 5 faire
     ecrire(i)
     i <- i + 1
-finTantque
-
+fin_tant_que
+ecrire("done")
 pour j de 1 à 10 pas=2 faire
     ecrire(j)
-finPour
+fin_pour
 
+Fin

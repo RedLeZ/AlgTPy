@@ -1,0 +1,8 @@
+algorithme idx_demo
+TDO:
+    t: tableau de 5 entier
+fin_tdo
+Debut
+    t[2] <- 7
+    ecrire(t[2])
+Fin
