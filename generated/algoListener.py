@@ -188,6 +188,15 @@ class algoListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by algoParser#fileMode.
+    def enterFileMode(self, ctx:algoParser.FileModeContext):
+        pass
+
+    # Exit a parse tree produced by algoParser#fileMode.
+    def exitFileMode(self, ctx:algoParser.FileModeContext):
+        pass
+
+
     # Enter a parse tree produced by algoParser#closeFileStmt.
     def enterCloseFileStmt(self, ctx:algoParser.CloseFileStmtContext):
         pass

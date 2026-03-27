@@ -3,11 +3,11 @@ grammar algo;
 // ------------------- Program -------------------
 
 program
-        : 'algorithme' IDENTIFIER NEWLINE+
+        : ('algorithme' | 'Algorithme') IDENTIFIER NEWLINE+
             ((tdntDecl | tdoDecl) NEWLINE*)*
-            ('début' | 'Debut') NEWLINE
+            ('début' | 'Debut' | 'Début' | 'debut') NEWLINE
             block
-            ('fin' | 'Fin')
+            ('fin' | 'Fin' | 'FIN')
         ;
 
 // ------------------- TDNT / TDO -------------------
@@ -57,7 +57,12 @@ statement
 // ------------------- File I/O -------------------
 
 openFileStmt
-    : 'ouvrir' '(' IDENTIFIER ',' IDENTIFIER  ',' ('r'|'w'|'a'|'rb'|'wb'|'ab') ')'
+    : 'ouvrir' '(' IDENTIFIER ',' IDENTIFIER  ',' fileMode ')'
+    ;
+
+fileMode
+    : IDENTIFIER
+    | CHAR
     ;
 
 closeFileStmt
@@ -77,27 +82,27 @@ outputStmt
 
 ifStmt
     : 'si' expr 'alors' NEWLINE block
-      ('sinon' 'si' expr 'alors' NEWLINE block)*
+      (('sinon' 'si' | 'sinonsi' | 'SinonSi' | 'sinonSi') expr 'alors' NEWLINE block)*
       ('sinon' NEWLINE block)?
-      'fin_si'
+      ('fin_si' | 'finsi')
     ;
 
 whileStmt
-    : 'tant' 'que' expr 'faire' NEWLINE block 'fin_tant_que'
+    : ('tant' 'que' | 'tantque') expr 'faire' NEWLINE block ('fin_tant_que' | 'fintantque')
     ;
 
 forStmt
-    : ('pour'|'Pour') IDENTIFIER 'de' expr 'à' expr ('pas' expr)? 'faire' NEWLINE block 'fin_pour'
+    : ('pour'|'Pour') IDENTIFIER 'de' expr ('à' | 'a') expr ('pas' ('=')? expr)? 'faire' NEWLINE block ('fin_pour' | 'finpour')
     ;
 
 jusquaStmt
-    : ('répéter' | 'repeter') NEWLINE block ('jusqu’à' | 'jusqua') expr
+    : ('répéter' | 'repeter' | 'Répéter' | 'Repeter') NEWLINE block ('jusqu’à' | 'jusqua' | 'jusqu\'a') expr
     ;
 
 selonStmt
     : 'selon' expr NEWLINE
       ( 'cas' expr ':' NEWLINE block )+
-      ('autres' ':' NEWLINE block)?
+            (('autres' | 'sinon') ':' NEWLINE block)?
       'fin_selon'
     ;
 
@@ -105,17 +110,17 @@ selonStmt
 
 procedureDecl
         : ('procedure'|'procédure'|'Procédure'|'Procedure') IDENTIFIER '(' paramList? ')' NEWLINE
-      'Debut' NEWLINE
+            ('Debut' | 'début' | 'Début' | 'debut') NEWLINE
       block
-      'Fin'
+            ('Fin' | 'fin' | 'fin_procedure' | 'fin_procédure')
     ;
 
 functionDecl
         : ('fonction'|'Fonction') IDENTIFIER '(' paramList? ')' ':' typeName NEWLINE
-      'Debut' NEWLINE
+            ('Debut' | 'début' | 'Début' | 'debut') NEWLINE
       block
       'retourner' expr NEWLINE
-      'Fin'
+            ('Fin' | 'fin' | 'fin_fonction')
     ;
 
 paramList
@@ -137,7 +142,7 @@ funcCall
 expr
     : expr op=('*'|'/') expr           # MulDiv
     | expr op=('+'|'-') expr           # AddSub
-    | expr op=('<'|'≤'|'>'|'≥'|'='|'≠'|'∈') expr  # Comparison
+    | expr op=('<'|'<='|'≤'|'>'|'>='|'≥'|'='|'=='|'!='|'≠'|'∈') expr  # Comparison
     | expr op=('et'|'ou'|'ouex') expr # Logical
     | 'non' expr                       # Negate
     | '(' expr ')'                     # Parens
@@ -151,7 +156,7 @@ expr
     ;
 
 assignStmt
-    : IDENTIFIER ('[' expr ']')? '<-' expr
+    : IDENTIFIER ('[' expr ']')? ('<-' | ':=') expr
     ;
 
 // ------------------- Types -------------------
@@ -175,7 +180,7 @@ typeName
 // ------------------- Lexer -------------------
 
 NUMBER: [0-9]+ ('.' [0-9]+)?;
-BOOLEAN: 'vrai' | 'faux';
+BOOLEAN: 'vrai' | 'faux' | 'VRAI' | 'FAUX';
 CHAR: '\'' . '\'';
 STRING: '"' (~["\r\n])* '"';
 // Explicit keywords to avoid being lexed as IDENTIFIER

@@ -109,6 +109,11 @@ class algoVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by algoParser#fileMode.
+    def visitFileMode(self, ctx:algoParser.FileModeContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by algoParser#closeFileStmt.
     def visitCloseFileStmt(self, ctx:algoParser.CloseFileStmtContext):
         return self.visitChildren(ctx)

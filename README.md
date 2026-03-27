@@ -14,13 +14,16 @@ It was created as a learning tool to help students quickly test, debug, and run 
 ---
 
 ## ✨ Why This Project?
+
 In Tunisian high schools, Informatics students are taught using a **paper-based algorithmic language** (keywords like `lire`, `ecrire`, `si`, `tantque`, etc.).  
 
 This has two major issues:
+
 - Students cannot run their code directly — they only write pseudocode on paper.  
 - Debugging and testing logic becomes very difficult without execution.  
 
 AlgTPy was made to solve this by **bridging Algo → Python**, so students can:
+
 - Run their exercises on a real computer.  
 - Test logic, loops, and conditions.  
 - Learn Python naturally by comparing both languages.  
@@ -28,9 +31,11 @@ AlgTPy was made to solve this by **bridging Algo → Python**, so students can:
 ---
 
 ## 🚧 Current Status
+
 This is an **early alpha (0.1a)** release.  
 
 Currently supported:
+
 - ✅ Variable declaration and assignment  
 - ✅ Input (`lire`) with type detection (`entier`, `réel`, `booléen`, `chaine`)  
 - ✅ Output (`ecrire`) → Python `print()`  
@@ -45,6 +50,7 @@ Currently supported:
 ---
 
 ## 🛠 Planned Features
+
 - ⏳ Better error messages when translation fails  
 - ⏳ A small CLI tool for easier usage  
 
@@ -58,6 +64,24 @@ python3 main.py -o output.py tests/example.algo
 
 * `tests/example.algo` → input file in Algo language
 * `output.py` → generated Python file
+
+Batch translation for a full folder:
+
+```bash
+python3 main.py --batch tests/
+```
+
+Batch translation and write all generated Python files to a directory:
+
+```bash
+python3 main.py --batch tests/ --output-dir generated_py/
+```
+
+Notes:
+
+* `--batch` expects a directory containing `.algo` files
+* `--output-dir` is only valid with `--batch`
+* exit code is non-zero when at least one file fails translation
 
 ---
 
@@ -102,3 +126,24 @@ Ideas for contribution:
 * Creating more test files
 * Writing documentation / examples
 
+---
+
+## ✅ Reliability Baseline
+
+Install runtime dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Install development dependencies (includes pytest):
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+Run automated fixture checks:
+
+```bash
+pytest -q
+```
