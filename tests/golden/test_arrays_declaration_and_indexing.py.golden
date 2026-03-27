@@ -1,0 +1,13 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+import numpy as np
+t = np.zeros(5, dtype=int)
+t[2] = 7
+print(t[2])

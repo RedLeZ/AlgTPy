@@ -147,3 +147,42 @@ Run automated fixture checks:
 ```bash
 pytest -q
 ```
+
+Run verbose test output with feature breakdown:
+
+```bash
+pytest -v
+```
+
+Run specific test classes (e.g., control flow tests):
+
+```bash
+pytest tests/test_feature_coverage.py::TestControlFlowFeature -v
+```
+
+Golden-output snapshots are stored in `tests/golden/` and validated automatically by pytest.
+If translator output changes intentionally, regenerate snapshots with:
+
+```bash
+for f in tests/test_*.algo; do
+    python3 main.py "$f" -o "tests/golden/$(basename "${f%.algo}").py.golden"
+done
+```
+---
+
+## 🔄 Continuous Integration
+
+Every push and pull request triggers automated tests via GitHub Actions, running on Python 3.10, 3.11, 3.12, and 3.13.
+
+The CI workflow:
+1. Installs dependencies and Java (required for ANTLR grammar regeneration)
+2. Regenerates grammar artifacts to ensure generated files are in sync
+3. Runs the full test suite (feature coverage, CLI validation, golden-output regression checks)
+4. Reports test results and detects any unintended code changes
+
+To check CI status locally before pushing:
+
+```bash
+pytest -q
+echo "$?"  # Exit code 0 means all tests passed
+```

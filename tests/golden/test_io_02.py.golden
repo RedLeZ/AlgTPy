@@ -1,0 +1,13 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+chemin = "tests/tmp_io_02.txt"
+f = open(chemin, 'w')
+f.write(str("hello"))
+f.close()

@@ -12,7 +12,8 @@ FIXTURES = sorted(FIXTURES_DIR.glob("test_*.algo"))
 
 
 @pytest.mark.parametrize("fixture", FIXTURES, ids=[p.name for p in FIXTURES])
-def test_single_fixture_translates_without_error(fixture: Path) -> None:
+def test_all_fixtures_translate_successfully_without_errors(fixture: Path) -> None:
+    """Verify each .algo fixture translates to valid Python without any errors."""
     result = subprocess.run(
         [sys.executable, str(MAIN), str(fixture)],
         cwd=PROJECT_ROOT,
@@ -29,7 +30,8 @@ def test_single_fixture_translates_without_error(fixture: Path) -> None:
     assert result.stderr.strip() == "", f"Unexpected stderr for {fixture.name}: {result.stderr}"
 
 
-def test_batch_mode_reports_all_passes() -> None:
+def test_batch_mode_processes_all_fixtures_with_success_status() -> None:
+    """Verify batch mode processes all fixtures and reports [PASS] for each."""
     result = subprocess.run(
         [sys.executable, str(MAIN), "--batch", str(FIXTURES_DIR)],
         cwd=PROJECT_ROOT,

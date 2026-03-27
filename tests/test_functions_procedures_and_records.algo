@@ -1,13 +1,6 @@
-algorithme TestAlgo
+algorithme functions_procedures_and_records
 
-// ----------------- TDO -----------------
-TDO
-	x : entier
-	y : reel
-	tab : tableau de 5 entier
-fin_tdo
-
-// ----------------- TDNT -----------------
+// Type declarations with records
 TDNT
 	eleve = enregistrement
 		nom : chaine,
@@ -15,17 +8,20 @@ TDNT
 	fin
 fin_tdnt
 
-// ----------------- Début -----------------
+TDO
+	x : entier
+	y : reel
+	tab : tableau de 5 entier
+fin_tdo
+
 Debut
 
-// Simple variable assignment
+// Simple arithmetic with multiple types
 x <- 10
 y <- 3.14
 ecrire(x+y)
 
-// Array filling
-
-// Procedure example
+// Procedure with parameters
 Procédure afficherTab(@ t : tableau entier, n : entier)
 Debut
 	Pour i de 0 à n-1 faire
@@ -37,7 +33,7 @@ Fin
 // Call procedure
 afficherTab(@tab, 5)
 
-// Function example
+// Function with return
 Fonction cube(n : entier) : entier
 Debut
 	s <- n*n*n

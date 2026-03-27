@@ -1,4 +1,5 @@
-algorithme idx_demo
+algorithme arrays_declaration_and_indexing
+
 TDO:
     t: tableau de 5 entier
 fin_tdo

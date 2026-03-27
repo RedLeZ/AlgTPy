@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12', '3.13']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install Java (required for ANTLR)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Regenerate grammar artifacts
+        env:
+          ANTLR_JAR: ${{ github.workspace }}/antlr-4.13.2-complete.jar
+        run: |
+          # Download ANTLR jar if not present
+          if [ ! -f "$ANTLR_JAR" ]; then
+            wget -q https://www.antlr.org/download/antlr-4.13.2-complete.jar -O "$ANTLR_JAR"
+          fi
+          bash scripts/regenerate.sh
+
+      - name: Verify grammar artifacts unchanged
+        run: |
+          git diff --exit-code generated/ || (echo "Grammar artifacts are out of sync; run 'bash scripts/regenerate.sh' locally" && exit 1)
+
+      - name: Run tests
+        run: |
+          pytest -q --tb=short
+
+      - name: Report test results
+        if: always()
+        run: |
+          pytest -q --tb=short --co -q || echo "No tests found"

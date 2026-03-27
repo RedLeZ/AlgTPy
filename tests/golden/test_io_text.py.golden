@@ -1,0 +1,46 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+def __eof_text(__f):
+    __pos = __f.tell()
+    __ch = __f.read(1)
+    if __ch == '':
+        return True
+    try:
+        __f.seek(__pos)
+    except Exception:
+        pass
+    return False
+
+def __eof_bin(__f):
+    try:
+        __p = __f.peek(1)
+        return __p == b''
+    except Exception:
+        __pos = __f.tell()
+        __b = __f.read(1)
+        if __b == b'':
+            return True
+        try:
+            __f.seek(__pos)
+        except Exception:
+            pass
+        return False
+
+chemin = "tests/tmp_io_text.txt"
+f = open(chemin, 'w')
+f.write(str("line1\n"))
+f.write(str("line2"))
+f.close()
+rf = open(chemin, 'r')
+s = ""
+while (not __eof_text(rf)):
+    s = rf.readline()
+    print(s)
+rf.close()

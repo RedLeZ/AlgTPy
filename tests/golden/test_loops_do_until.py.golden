@@ -1,0 +1,15 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+c = 0
+while True:
+    c = (c + 1)
+    print(c)
+    if (c == 3): break
+print("finished")

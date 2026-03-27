@@ -1,0 +1,21 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+x = 10
+x = autodetect(input())
+c = (12 <= 10)
+x = (x + 1.98)
+if (x > 12):
+    print("nice")
+    if (c == False):
+        print("omg")
+elif (x < 12):
+    print("mid")
+print(c)
+print(x)

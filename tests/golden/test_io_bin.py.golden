@@ -1,0 +1,23 @@
+import ast
+def autodetect(value):
+    v = value.strip()
+    try:
+        return ast.literal_eval(v)
+    except (ValueError, SyntaxError):
+        return v
+
+# Translated from algo
+import pickle
+chemin = "tests/tmp_io_bin.dat"
+f = open(chemin, 'wb')
+pickle.dump(42, f)
+pickle.dump(12, f)
+f.close()
+f2 = open(chemin, 'rb')
+x = 0
+y = 0
+x = pickle.load(f2)
+y = pickle.load(f2)
+f2.close()
+print(x)
+print(y)
